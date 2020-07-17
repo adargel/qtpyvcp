@@ -1143,7 +1143,8 @@ class PathBoundaries:
         cube_axes_actor.SetYLabelFormat("%6.3f")
         cube_axes_actor.SetZLabelFormat("%6.3f")
 
-        cube_axes_actor.SetFlyModeToStaticEdges()
+        cube_axes_actor.SetUse2DMode(1)
+        cube_axes_actor.SetFlyModeToFurthestTriad()
 
         cube_axes_actor.GetTitleTextProperty(0).SetColor(1.0, 0.0, 0.0)
         cube_axes_actor.GetLabelTextProperty(0).SetColor(1.0, 0.0, 0.0)
@@ -1325,7 +1326,8 @@ class Machine:
         cube_axes_actor.SetYLabelFormat("%6.3f")
         cube_axes_actor.SetZLabelFormat("%6.3f")
 
-        cube_axes_actor.SetFlyModeToStaticEdges()
+        cube_axes_actor.SetUse2DMode(1)
+        cube_axes_actor.SetFlyModeToFurthestTriad()
 
         cube_axes_actor.GetTitleTextProperty(0).SetColor(1.0, 0.0, 0.0)
         cube_axes_actor.GetLabelTextProperty(0).SetColor(1.0, 0.0, 0.0)
