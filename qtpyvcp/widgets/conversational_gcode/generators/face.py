@@ -2,7 +2,32 @@ from __future__ import division
 from base_generator import BaseGenerator
 
 from math import ceil
-from math import floor
+
+
+class GCode(object):
+    def __init__(self, starting_line_number=10, stride=5):
+        self.gcode = []
+        self.stride = stride
+        self.line_number = starting_line_number
+
+    def append(self, value):
+        self.gcode.append('N%i %s' % (self.get_next_line_number_(), value))
+        return self
+
+    def to_string(self):
+        return '\n'.join(self.gcode)
+
+    def write_to_file(self, file_name):
+        f = open(file_name, 'w')
+        try:
+            f.write(self.to_string())
+        finally:
+            f.close()
+
+    def get_next_line_number_(self):
+        line_number = self.line_number
+        self.line_number += self.stride
+        return line_number
 
 
 class Face(BaseGenerator):
@@ -17,124 +42,91 @@ class Face(BaseGenerator):
         self.lead_in = 0.1
         self.lead_out = 0.1
         self.tool_diameter = 0.
+        self.vertical_lead_in_radius = self.vertical_lead_out_radius = 0.2
 
-    def simple(self):
+    def face(self):
+        lead_in = lead_out = self.tool_diameter * 0.1
         tool_radius = self.tool_diameter / 2
-        step_over = self.tool_diameter * self.step_over / 100
 
-        part_width = abs(self.y_end - self.y_start)
-        num_y_steps = int(abs(ceil(ceil(part_width / step_over))))
-        step_over = part_width / num_y_steps
+        y_dist = abs(self.y_end - self.y_start)
+        num_step_overs = abs(int(ceil(y_dist / self.step_over)))
+        step_over = abs(y_dist / num_step_overs)
 
-        part_depth = abs(self.z_end - self.z_start)
-        num_z_steps = (abs(int(ceil(part_depth / self.step_down))))
-        step_down = part_depth / num_z_steps
+        z_dist = abs(self.z_end - self.z_start)
+        num_step_downs = abs(int(ceil(z_dist / self.step_down)))
+        step_down = abs(z_dist / num_step_downs)
 
-        x_start = self.x_start - tool_radius - self.lead_in
-        x_end = self.x_end + tool_radius + self.lead_out
-        y_start = self.y_start + tool_radius - step_over
-        z_start = self.z_start - step_down
-
-        output = [
-            self.preamble(),
-            'G0 X%.4f Y%.4f' % (x_start, y_start),
-            'G0 Z%.4f' % self.z_clear,
-        ]
-#
-        x = x_end
-        y = y_start
-        z = z_start
-        for i in range(num_z_steps):
-            output.append('G1 Z%.4f' % z)
-            output.append('G1 X%.4f' % x)
-            x = x_start if x == x_end else x_end
-            for j in range(0, num_y_steps - 1):
-                y -= step_over
-                output.append('G1 Y%.4f' % y)
-                output.append('G1 X%.4f' % x)
-                x = x_start if x == x_end else x_end
-            z -= step_down
-            step_over = -step_over
-
-        output.append(self.epilog())
-
-        return '\n'.join(output)
-
-    def spiral(self):
-        tool_radius = self.tool_diameter / 2
-        step_over = self.tool_diameter * self.step_over / 100
-
-        part_width = abs(self.y_end - self.y_start)
-        num_y_steps = int(abs(ceil(ceil(part_width / step_over))))
-        step_over = part_width / num_y_steps
-
-        part_depth = abs(self.z_end - self.z_start)
-        num_z_steps = (abs(int(ceil(part_depth / self.step_down))))
-        step_down = part_depth / num_z_steps
-
-        x_start = self.x_start - tool_radius
-        x_end = self.x_end + tool_radius - step_over
-
+        x_start = self.x_start - tool_radius - lead_in
+        x_end = self.x_end + tool_radius + lead_out
         y_start = self.y_start + tool_radius - step_over
         y_end = self.y_end - tool_radius + step_over
+        z_start = (self.z_start + lead_in)
 
-        output = [
-            self.preamble(),
-            'G0 X%.4f Y%.4f' % (x_start, y_start),
-            'G0 Z%.4f' % self.z_clear,
-        ]
+        gcode = GCode()
+        gcode.append(self.preamble())
+        gcode.append('G0 X%.3f Y%.3f' % (x_start, y_start))
+        gcode.append('G0 Z%.3f' % z_start)
+        gcode.append('G1 Z%.3f' % (z_start - step_down))
+        gcode.append('G18 G2 X%.3f Z%.3f I0.2 K0.' % (x_start + 0.2, -step_down))
 
-        z = self.z_start
-        start = (x_start, y_start)
-        end = (x_end, y_end)
-        for i in range(num_z_steps):
+        x = self.x_end
+        y = y_start
+        z = -step_down
+        for i in xrange(num_step_downs):
             z -= step_down
-            output.append('G0 Z%.4f' % z)
-            for j in range(0, num_y_steps):
-                if (i*num_y_steps+j) % 2 == 0:
-                    output.append('G1 X%.4f' % x_end)
-                    y_start -= step_over
-                    output.append('G1 Y%.4f' % y_end)
-                    x_end -= step_over
+            gcode.append('G1 X%.3f F%.4f' % (x, self.feed))
+            for j in xrange(num_step_overs - 1):
+                y -= step_over
+                if x == self.x_end:
+                    gcode.append('G17 %s Y%.3f I0 J-%.4f' % ('G2' if (i % 2) == 0 else 'G3', y, step_over / 2))
+                    x = self.x_start
                 else:
-                    output.append('G1 X%.4f' % x_start)
-                    y_end += step_over
-                    output.append('G1 Y%.4f' % y_start)
-                    x_start += step_over
+                    gcode.append('G17 %s Y%.3f I0 J-%.4f' % ('G3' if (i % 2) == 0 else 'G2', y, step_over / 2))
+                    x = self.x_end
+                gcode.append('G1 X%.4f' % x)
 
-            x_start, y_start = start
-            x_end, y_end = end
+            if i == (num_step_downs - 1):
+                if x == self.x_end:
+                    gcode.append('G18 G2 X%.3f Z%.3f I0 K0.2' % (self.x_end + 0.2, z + 0.2))
+                else:
+                    gcode.append('G18 G3 X%.3f Z%.3f I0 K0.2' % (self.x_start - 0.2, z + 0.2))
+                break
 
-            output.append('G0 Z%.4f' % self.z_clear)
-            output.append('G0 X%.4f Y%.4f' % (x_start, y_start))
+            if x == self.x_end:
+                gcode.append('G1 X%.4f Y%.4f' % (x_end, y_end))
+                x = self.x_start
+                y = y_end
+            else:
+                gcode.append('G1 X%.4f Y%.4f' % (x_start, y_start))
+                x = self.x_end
+                y = y_start
 
-        output.append(self.epilog())
-        return '\n'.join(output)
+            gcode.append('G1 Z%.4f F%.4f' % (z, self.z_feed))
+            step_over = -step_over
 
+        gcode.append(self.epilog())
+
+        return gcode
 
 if __name__ == "__main__":
-    def write_to_file(file_name, data):
-        f = open(file_name, 'w')
-        try:
-            f.write(data)
-        finally:
-            f.close()
-
     f = Face()
     f.unit = 'G20'
-    f.feed = 80
-    f.speed = 240
-    f.y_start = 4
-    f.y_end = 0
+    f.feed = 250
+    f.speed = 1200
+    f.y_start = 0
+    f.y_end = -5
     f.x_start = 0
     f.x_end = 8
-    f.step_over = 100
     f.z_clear = 1
     f.z_start = 0.
-    f.z_end = -0.05
-    f.step_down = .01
-    f.tool_diameter = 1
+    f.z_end = -0.06
+    f.z_feed = 4
+    f.step_down = .04
+    f.tool_diameter = 2
+    f.step_over = 1.9
     f.wcs = 'G55'
-    f.tool = 7
-    print f.spiral()
-    write_to_file('/tmp/face.ngc', f.spiral())
+    f.tool = 101
+
+    output = f.face()
+    print output.to_string()
+    output.write_to_file('/tmp/face.ngc')

@@ -13,7 +13,7 @@ class BaseGenerator(object):
 
     def preamble(self):
         output = [
-            'G90 G94 G17',
+            'G90 G94 G17 G91.1',
             self.wcs,
             self.unit,
             'G53 G0 Z0',
