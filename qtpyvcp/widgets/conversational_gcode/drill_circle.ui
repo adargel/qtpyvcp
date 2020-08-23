@@ -18,7 +18,16 @@
     <widget class="QWidget" name="drill_circle_widget" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout_128">
       <property name="leftMargin">
-       <number>50</number>
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
       </property>
       <item>
        <spacer name="horizontalSpacer_6">
@@ -1092,6 +1101,9 @@ color: rgb(255, 255, 255);
       </item>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>0</number>
+        </property>
         <property name="leftMargin">
          <number>0</number>
         </property>
@@ -1102,297 +1114,17 @@ color: rgb(255, 255, 255);
          <number>0</number>
         </property>
         <item>
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QFrame" name="bolt_hole_setup_frame_2">
-          <property name="minimumSize">
-           <size>
-            <width>470</width>
-            <height>100</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>470</width>
-            <height>190</height>
-           </size>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_63">
-           <item>
-            <layout class="QVBoxLayout" name="verticalLayout_2">
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_209">
-               <property name="topMargin">
-                <number>1</number>
-               </property>
-               <property name="bottomMargin">
-                <number>1</number>
-               </property>
-               <item>
-                <widget class="QLabel" name="spotting_tool_label">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>140</width>
-                   <height>31</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>31</height>
-                  </size>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">QLabel{
-font: 75 14pt &quot;Bebas Kai&quot;;
-color: white;
-}</string>
-                 </property>
-                 <property name="lineWidth">
-                  <number>0</number>
-                 </property>
-                 <property name="text">
-                  <string>SPOTTING TOOL</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                 <property name="indent">
-                  <number>0</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="spotting_tool_value">
-                 <property name="minimumSize">
-                  <size>
-                   <width>100</width>
-                   <height>33</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>100</width>
-                   <height>33</height>
-                  </size>
-                 </property>
-                 <property name="inputMask">
-                  <string/>
-                 </property>
-                 <property name="text">
-                  <string>0</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_200">
-               <property name="topMargin">
-                <number>1</number>
-               </property>
-               <property name="bottomMargin">
-                <number>1</number>
-               </property>
-               <item>
-                <widget class="QLabel" name="label_138">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>140</width>
-                   <height>31</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>31</height>
-                  </size>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">QLabel{
-font: 75 14pt &quot;Bebas Kai&quot;;
-color: white;
-}</string>
-                 </property>
-                 <property name="lineWidth">
-                  <number>0</number>
-                 </property>
-                 <property name="text">
-                  <string>SPINDLE SPEED (RPM)</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                 <property name="indent">
-                  <number>0</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="bolt_hole_spindle_rpm_4">
-                 <property name="minimumSize">
-                  <size>
-                   <width>100</width>
-                   <height>33</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>100</width>
-                   <height>33</height>
-                  </size>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">QLineEdit {
-    border-style: transparent;
-    border-color: rgb(235, 235, 235);
-    border-width: 1px;
-    border-radius: 5px;
-    color: black;
-    background: white;
-	font: 75 14pt &quot;Bebas Kai&quot;;
-}</string>
-                 </property>
-                 <property name="inputMask">
-                  <string/>
-                 </property>
-                 <property name="text">
-                  <string>0.00</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_195">
-               <property name="topMargin">
-                <number>1</number>
-               </property>
-               <property name="bottomMargin">
-                <number>1</number>
-               </property>
-               <item>
-                <widget class="QLabel" name="label_132">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>140</width>
-                   <height>31</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>31</height>
-                  </size>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">QLabel{
-font: 75 14pt &quot;Bebas Kai&quot;;
-color: white;
-}</string>
-                 </property>
-                 <property name="lineWidth">
-                  <number>0</number>
-                 </property>
-                 <property name="text">
-                  <string>Z FEEDRATE</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                 <property name="indent">
-                  <number>0</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="bolt_hole_z_feed_rate_4">
-                 <property name="minimumSize">
-                  <size>
-                   <width>100</width>
-                   <height>33</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>100</width>
-                   <height>33</height>
-                  </size>
-                 </property>
-                 <property name="inputMask">
-                  <string/>
-                 </property>
-                 <property name="text">
-                  <string>0.000</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
          <widget class="QFrame" name="bolt_hole_setup_frame">
           <property name="minimumSize">
            <size>
             <width>470</width>
-            <height>360</height>
+            <height>400</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>470</width>
-            <height>360</height>
+            <height>400</height>
            </size>
           </property>
           <property name="frameShape">
@@ -1455,13 +1187,13 @@ color: white;
                <property name="minimumSize">
                 <size>
                  <width>100</width>
-                 <height>31</height>
+                 <height>33</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
                  <width>100</width>
-                 <height>31</height>
+                 <height>33</height>
                 </size>
                </property>
                <property name="currentText">
@@ -1533,13 +1265,13 @@ color: white;
                <property name="minimumSize">
                 <size>
                  <width>100</width>
-                 <height>31</height>
+                 <height>33</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
                  <width>100</width>
-                 <height>31</height>
+                 <height>33</height>
                 </size>
                </property>
                <property name="currentText">
@@ -1632,7 +1364,7 @@ color: white;
               <number>1</number>
              </property>
              <item>
-              <widget class="QLabel" name="tool_number_label">
+              <widget class="QLabel" name="tool_desc_label">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -1654,6 +1386,46 @@ color: white;
                <property name="styleSheet">
                 <string notr="true">QLabel{
 font: 75 14pt &quot;Bebas Kai&quot;;
+color: rgb(120, 120, 120);
+}</string>
+               </property>
+               <property name="lineWidth">
+                <number>0</number>
+               </property>
+               <property name="text">
+                <string> NO TOOL SELECTED</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="indent">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="tool_number_label">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>55</width>
+                 <height>31</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>55</width>
+                 <height>31</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLabel{
+font: 75 14pt &quot;Bebas Kai&quot;;
 color: white;
 }</string>
                </property>
@@ -1661,7 +1433,7 @@ color: white;
                 <number>0</number>
                </property>
                <property name="text">
-                <string>TOOL NUMBER</string>
+                <string>TOOL #</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1684,6 +1456,9 @@ color: white;
                  <width>100</width>
                  <height>33</height>
                 </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true"/>
                </property>
                <property name="inputMask">
                 <string/>
@@ -1750,13 +1525,13 @@ color: white;
               <widget class="QLineEdit" name="bolt_hole_spindle_rpm">
                <property name="minimumSize">
                 <size>
-                 <width>80</width>
+                 <width>100</width>
                  <height>33</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>80</width>
+                 <width>100</width>
                  <height>33</height>
                 </size>
                </property>
@@ -1827,13 +1602,91 @@ color: white;
                <property name="minimumSize">
                 <size>
                  <width>100</width>
-                 <height>31</height>
+                 <height>33</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
                  <width>100</width>
+                 <height>33</height>
+                </size>
+               </property>
+               <property name="currentText">
+                <string/>
+               </property>
+               <property name="currentIndex">
+                <number>-1</number>
+               </property>
+               <property name="maxVisibleItems">
+                <number>10</number>
+               </property>
+               <property name="maxCount">
+                <number>2147483647</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_195">
+             <property name="topMargin">
+              <number>1</number>
+             </property>
+             <property name="bottomMargin">
+              <number>1</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="label_158">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>140</width>
                  <height>31</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>31</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLabel{
+font: 75 14pt &quot;Bebas Kai&quot;;
+color: white;
+}</string>
+               </property>
+               <property name="lineWidth">
+                <number>0</number>
+               </property>
+               <property name="text">
+                <string>COOLANT</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="indent">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="coolant_combo_box">
+               <property name="minimumSize">
+                <size>
+                 <width>100</width>
+                 <height>33</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>100</width>
+                 <height>33</height>
                 </size>
                </property>
                <property name="currentText">
@@ -2040,7 +1893,7 @@ color: white;
                 <number>0</number>
                </property>
                <property name="text">
-                <string>Z CLEARANCE HEIGHT</string>
+                <string>CLEARANCE HEIGHT</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2051,7 +1904,7 @@ color: white;
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="bolt_hole_z_clearance_height">
+              <widget class="QLineEdit" name="bolt_hole_clearance_height">
                <property name="minimumSize">
                 <size>
                  <width>100</width>
@@ -2079,6 +1932,9 @@ color: white;
            </item>
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_139">
+             <property name="topMargin">
+              <number>5</number>
+             </property>
              <item>
               <widget class="QPushButton" name="bolt_hole_add_to_file">
                <property name="minimumSize">
@@ -2109,19 +1965,6 @@ color: white;
            </item>
           </layout>
          </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_3">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </item>

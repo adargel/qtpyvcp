@@ -94,12 +94,7 @@ class GCode(object):
         self.arc(x=x+radius, i=radius, f=f, dir=dir)
 
     def add(self, value):
-        if isinstance(value, str):
-            self.output.append(value)
-        else:
-            self.output.extend(value)
-
-        return self
+        self.output.append(value)
 
     def to_string(self):
         output = []
@@ -140,53 +135,51 @@ class GCode(object):
         self.line_number += self.stride
         return line_number
 
-
 class Drill(object):
     def __init__(self, gcode):
         self.gcode = gcode
+        self.holes = []
+        self.zstart = 0.
+        self.zend = 0.
+        self.zclear = 0.
+        self.retract = 0.
+        self.zfeed = 0.
 
-    def drill(self, z_end=0., r=0., f=None):
-        output = ['G98 G81 R%.4f Z%.4f' % (r, z_end)]
-        if f is not None:
-            output.append('F%.4f' % f)
+    def drill(self):
+        self._build_gcode('G98 G81 R%.4f Z%.4f F%.4f' % (self.zstart + self.retract, self.zend, self.zfeed))
 
-        self.gcode.add([' '.join(output), 'G80'])
+    def dwell(self, p=0.1):
+        self.gcode.add('G98 G82 R%.4f Z%.4f P%.4f F%.4f' % (self.zstart + self.retract, self.zend, p, self.zfeed))
+        self._add_holes()
+        self.gcode.add('G80')
 
-    def dwell(self, z=0., r=0., f=None, p=0.1):
-        output = ['G98 G82 R%.4f Z%.4f P%.4f' % (r, z, p)]
-        if f is not None:
-            output.append('F%.4f' % f)
-
-        self.gcode.add([' '.join(output), 'G80'])
-
-    def peck(self, z=0., r=0., f=None, q=0.1):
-        output = ['G98 G83 R%.4f Z%.4f Q%.4f' % (r, z, q)]
-        if f is not None:
-            output.append('F%.4f' % f)
-
-        self.gcode.add([' '.join(output), 'G80'])
+    def peck(self, q=0.1):
+        self.gcode.add('G98 G83 R%.4f Z%.4f Q%.4f F%.4f' % (self.zstart + self.retract, self.zend, q, self.zfeed))
+        self._add_holes()
+        self.gcode.add('G80')
 
     def chip_break(self, z=0., r=0., f=None, q=0.1):
-        output = ['G98 G73 R%.4f Z%.4f Q%.4f' % (r, z, q)]
-        if f is not None:
-            output.append('F%.4f' % f)
+        self.gcode.add('G98 G73 R%.4f Z%.4f Q%.4f F%.4f' % (self.zstart + self.retract, self.zend, q, self.zfeed))
+        self._add_holes()
+        self.gcode.add('G80')
 
-        self.gcode.add([' '.join(output), 'G80'])
-
-    def tap(self, zstart=0., zend=0., speed=0., pitch=0.):
+    def tap(self, pitch=0., speed=0., dir='cw'):
         feed = abs(speed * pitch)
         self.gcode.add('S%.4f' % speed)
-        cycle = 'G74' if speed < 0 else 'G84'
-        self.gcode.add('G98 %s R%.4f Z%.4f F%.4f S%.4f' % (cycle, zstart, zend, feed, speed))
+        cycle = 'G74' if dir == 'ccw' else 'G84'
+        self.gcode.add('G98 %s R%.4f Z%.4f F%.4f' % (cycle, self.zstart + self.retract, self.zend, feed))
+        self._add_holes()
         self.gcode.add('G80')
 
-    def rigid_tap(self, zend=0., pitch=0.):
-        self.gcode.add('G33.1 Z%.4f K%.4f' % (zend, pitch))
+    def rigid_tap(self, pitch=0.):
+        self.gcode.add('G33.1 Z%.4f K%.4f F%.4f' % (self.zend, pitch, self.zfeed))
+        self._add_holes()
         self.gcode.add('G80')
 
-    @staticmethod
-    def bolt_hole_circle_xy(num_holes, circle_diam, circle_center, start_angle=0):
-        holes = []
+    def add_hole(self, x=None, y=None):
+        self.holes.append((x, y))
+
+    def bolt_hole_circle(self, num_holes, circle_diam, circle_center, start_angle=0):
         curr_angle = start_angle
         angle_step = (360. / num_holes)
 
@@ -197,9 +190,19 @@ class Drill(object):
             y += circle_center[1]
             curr_angle += angle_step
 
-            holes.append((x, y))
-            return holes
+            print "adding X%.4f, Y%.4f" % (x, y)
+            self.add_hole(x=x, y=y)
 
+    def _add_holes(self):
+        for hole in self.holes[1:]:
+            self.gcode.add('X%.4f Y%.4f' % (hole[0], hole[1]))
+
+    def _build_gcode(self, cycle):
+        self.gcode.rapid(x=self.holes[0][0], y=self.holes[0][1])
+        self.gcode.rapid(z=self.zstart + self.retract)
+        self.gcode.add(cycle)
+        self._add_holes()
+        self.gcode.add('G80')
 
 if __name__ == "__main__":
     gcode = GCode()
