@@ -162,3 +162,4 @@ class DROLineEdit_Plugin(_DesignerPlugin):
         return 'dro_entry'
     def designerExtensions(self):
         return [DroEditorExtension, RulesEditorExtension]
+

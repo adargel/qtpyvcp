@@ -150,7 +150,7 @@ color: rgb(255, 255, 255);
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="bolt_hole_diameter">
+             <widget class="QLineEdit" name="diameter">
               <property name="minimumSize">
                <size>
                 <width>70</width>
@@ -280,7 +280,7 @@ Holes</string>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="bolt_hole_num_holes">
+             <widget class="QLineEdit" name="num_holes">
               <property name="minimumSize">
                <size>
                 <width>70</width>
@@ -404,7 +404,7 @@ ANGLE</string>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="bolt_hole_start_angle">
+             <widget class="QLineEdit" name="start_angle">
               <property name="minimumSize">
                <size>
                 <width>70</width>
@@ -527,7 +527,7 @@ color: rgb(255, 255, 255);
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="bolt_hole_center_x">
+             <widget class="QLineEdit" name="center_x">
               <property name="minimumSize">
                <size>
                 <width>70</width>
@@ -650,7 +650,7 @@ color: rgb(255, 255, 255);
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="bolt_hole_center_y">
+             <widget class="QLineEdit" name="center_y">
               <property name="minimumSize">
                <size>
                 <width>70</width>
@@ -784,7 +784,7 @@ color: rgb(255, 255, 255);
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="bolt_hole_retract">
+             <widget class="QLineEdit" name="retract">
               <property name="minimumSize">
                <size>
                 <width>70</width>
@@ -902,7 +902,7 @@ color: rgb(255, 255, 255);
 }</string>
               </property>
               <property name="text">
-               <string>START</string>
+               <string>HOLE START</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -913,7 +913,7 @@ color: rgb(255, 255, 255);
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="bolt_hole_start">
+             <widget class="QLineEdit" name="hole_start">
               <property name="minimumSize">
                <size>
                 <width>70</width>
@@ -1031,7 +1031,7 @@ color: rgb(255, 255, 255);
 }</string>
               </property>
               <property name="text">
-               <string>END</string>
+               <string>HOLE END</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -1042,7 +1042,7 @@ color: rgb(255, 255, 255);
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="bolt_hole_end">
+             <widget class="QLineEdit" name="hole_end">
               <property name="minimumSize">
                <size>
                 <width>70</width>
@@ -1183,7 +1183,7 @@ color: white;
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="bolt_hole_wcs">
+              <widget class="WCSComboBox" name="wcs">
                <property name="minimumSize">
                 <size>
                  <width>100</width>
@@ -1195,18 +1195,6 @@ color: white;
                  <width>100</width>
                  <height>33</height>
                 </size>
-               </property>
-               <property name="currentText">
-                <string/>
-               </property>
-               <property name="currentIndex">
-                <number>-1</number>
-               </property>
-               <property name="maxVisibleItems">
-                <number>10</number>
-               </property>
-               <property name="maxCount">
-                <number>2147483647</number>
                </property>
               </widget>
              </item>
@@ -1261,7 +1249,7 @@ color: white;
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="bolt_hole_drill_type">
+              <widget class="DrillTypeComboBox" name="drill_type">
                <property name="minimumSize">
                 <size>
                  <width>100</width>
@@ -1273,18 +1261,6 @@ color: white;
                  <width>100</width>
                  <height>33</height>
                 </size>
-               </property>
-               <property name="currentText">
-                <string/>
-               </property>
-               <property name="currentIndex">
-                <number>-1</number>
-               </property>
-               <property name="maxVisibleItems">
-                <number>10</number>
-               </property>
-               <property name="maxCount">
-                <number>2147483647</number>
                </property>
               </widget>
              </item>
@@ -1346,7 +1322,7 @@ color: white;
                 <string/>
                </property>
                <property name="text">
-                <string/>
+                <string>0.000</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1444,7 +1420,7 @@ color: white;
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="bolt_hole_tool_number">
+              <widget class="QLineEdit" name="tool_number">
                <property name="minimumSize">
                 <size>
                  <width>100</width>
@@ -1456,9 +1432,6 @@ color: white;
                  <width>100</width>
                  <height>33</height>
                 </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true"/>
                </property>
                <property name="inputMask">
                 <string/>
@@ -1522,7 +1495,7 @@ color: white;
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="bolt_hole_spindle_rpm">
+              <widget class="QLineEdit" name="spindle_rpm">
                <property name="minimumSize">
                 <size>
                  <width>100</width>
@@ -1598,7 +1571,7 @@ color: white;
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="bolt_hole_spindle_direction">
+              <widget class="SpindleDirectionComboBox" name="spindle_direction">
                <property name="minimumSize">
                 <size>
                  <width>100</width>
@@ -1610,18 +1583,6 @@ color: white;
                  <width>100</width>
                  <height>33</height>
                 </size>
-               </property>
-               <property name="currentText">
-                <string/>
-               </property>
-               <property name="currentIndex">
-                <number>-1</number>
-               </property>
-               <property name="maxVisibleItems">
-                <number>10</number>
-               </property>
-               <property name="maxCount">
-                <number>2147483647</number>
                </property>
               </widget>
              </item>
@@ -1676,7 +1637,7 @@ color: white;
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="coolant_combo_box">
+              <widget class="CoolantComboBox" name="coolant_setting">
                <property name="minimumSize">
                 <size>
                  <width>100</width>
@@ -1688,18 +1649,6 @@ color: white;
                  <width>100</width>
                  <height>33</height>
                 </size>
-               </property>
-               <property name="currentText">
-                <string/>
-               </property>
-               <property name="currentIndex">
-                <number>-1</number>
-               </property>
-               <property name="maxVisibleItems">
-                <number>10</number>
-               </property>
-               <property name="maxCount">
-                <number>2147483647</number>
                </property>
               </widget>
              </item>
@@ -1754,7 +1703,7 @@ color: white;
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="bolt_hole_xy_feed_rate">
+              <widget class="QLineEdit" name="xy_feed_rate">
                <property name="minimumSize">
                 <size>
                  <width>100</width>
@@ -1767,8 +1716,10 @@ color: white;
                  <height>33</height>
                 </size>
                </property>
-               <property name="inputMask">
-                <string/>
+               <property name="styleSheet">
+                <string notr="true">QLineEdit[error=&quot;true&quot;]{
+ 	background-color: rgb(237, 102, 99);
+}</string>
                </property>
                <property name="text">
                 <string>0.000</string>
@@ -1829,7 +1780,7 @@ color: white;
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="bolt_hole_z_feed_rate">
+              <widget class="QLineEdit" name="z_feed_rate">
                <property name="minimumSize">
                 <size>
                  <width>100</width>
@@ -1904,7 +1855,7 @@ color: white;
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="bolt_hole_clearance_height">
+              <widget class="QLineEdit" name="clearance_height">
                <property name="minimumSize">
                 <size>
                  <width>100</width>
@@ -1973,6 +1924,28 @@ color: white;
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>WCSComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qtpyvcp.widgets.conversational_gcode.drill_circle</header>
+  </customwidget>
+  <customwidget>
+   <class>DrillTypeComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qtpyvcp.widgets.conversational_gcode.drill_circle</header>
+  </customwidget>
+  <customwidget>
+   <class>SpindleDirectionComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qtpyvcp.widgets.conversational_gcode.drill_circle</header>
+  </customwidget>
+  <customwidget>
+   <class>CoolantComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qtpyvcp.widgets.conversational_gcode.drill_circle</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
