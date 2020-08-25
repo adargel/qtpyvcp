@@ -1,28 +1,14 @@
-from drill_circle import DrillCircle, WCSComboBox, DrillTypeComboBox, SpindleDirectionComboBox, CoolantComboBox, \
-    ToolNumberLineEdit
-
+from drill_circle import *
 from qtpyvcp.widgets.qtdesigner import _DesignerPlugin
 
-class DrillCirclePlugin(_DesignerPlugin):
+class IntLineEditPlugin(_DesignerPlugin):
     def pluginClass(self):
-        return DrillCircle
+        return IntLineEdit
 
-class WCSComboBoxPlugin(_DesignerPlugin):
+class FloatLineEditPlugin(_DesignerPlugin):
     def pluginClass(self):
-        return WCSComboBox
+        return FloatLineEdit
 
-class DrillTypeComboBoxPlugin(_DesignerPlugin):
+class DrillGeneratorPlugin(_DesignerPlugin):
     def pluginClass(self):
-        return DrillTypeComboBox
-
-class CoolantComboBoxPlugin(_DesignerPlugin):
-    def pluginClass(self):
-        return CoolantComboBox
-
-class SpindleDirectionComboBoxPlugin(_DesignerPlugin):
-    def pluginClass(self):
-        return SpindleDirectionComboBox
-
-class ToolNumberLineEditPlugin(_DesignerPlugin):
-    def pluginClass(self):
-        return ToolNumberLineEdit
+        return DrillGenerator

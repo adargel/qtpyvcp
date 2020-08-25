@@ -100,7 +100,7 @@ class Pocketing:
         self.gcode.rapid(z=zstart)
 
         if tool_diameter > pocket_diameter:
-            raise ValueError('The tool is too large to create a pocket. Tool diameter %.2f, Pocket Diameter % .2f' %
+            raise ValueError('The tool is too large to create the pocket. Tool diameter %.2f, Pocket Diameter % .2f' %
                              (tool_diameter, pocket_diameter))
 
         if tool_diameter == pocket_diameter:

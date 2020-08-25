@@ -96,24 +96,32 @@ class Drill(BaseGenerator):
         self.hole_locations = []
 
     def drill(self):
-        return self.build_gcode_('G98 G81 R%.4f Z%.4f F%.4f' % (self.z_start, self.z_end, self.z_feed))
+        return self.build_gcode_('G98 G81 R%.4f Z%.4f F%.4f' % (self.z_feed_start, self.z_end, self.z_feed))
 
     def dwell(self, dwell_time):
         return self.build_gcode_('G98 G82 R%.4f Z%.4f P%.4f F%.4f' %
                                  (self.z_start, self.z_end, dwell_time, self.z_feed))
 
     def peck(self, delta):
-        return self.build_gcode_('G98 G83 R%.4f Z%.4f Q%.4f F%.4f' % (self.z_start, self.z_end, delta, self.z_feed))
+        return self.build_gcode_('G98 G83 R%.4f Z%.4f Q%.4f F%.4f' % (self.z_feed_start, self.z_end, delta,
+                                                                      self.z_feed))
 
     def chip_break(self, delta):
-        return self.build_gcode_('G98 G73 R%.4f Z%.4f Q%.4f F%.4f' % (self.z_start,  self.z_end, delta, self.z_feed))
+        return self.build_gcode_('G98 G73 R%.4f Z%.4f Q%.4f F%.4f' % (self.z_feed_start, self.z_end, delta,
+                                                                      self.z_feed))
 
     def tap(self, pitch):
         self.z_feed = abs(self.speed * pitch)
         return self.build_gcode_('G98 %s R%.4f Z%.4f F%.4f S%.4f' % ('G74' if self.speed < 0. else 'G84',
-                                  self.z_start,  self.z_end, self.z_feed, abs(self.speed)))
+                                 self.z_feed_start, self.z_end, self.z_feed, abs(self.speed)))
 
-    def bolt_hole_circle_xy(self, num_holes, circle_diam, circle_center, start_angle=0):
+    def rigid_tap(self, pitch=0.):
+        return self.build_gcode_('G33.1 Z%.4f K%.4f F%.4f' % (self.z_end, pitch, self.z_feed))
+
+    def add_hole_circle(self, num_holes, circle_diam, circle_center, start_angle=0):
+        if num_holes == 0:
+            return
+
         curr_angle = start_angle
         angle_step = (360. / num_holes)
 
@@ -127,19 +135,20 @@ class Drill(BaseGenerator):
             self.hole_locations.append((x, y))
 
     def build_gcode_(self, cycle):
-        return '\n'.join([
-            self.preamble(),
-            "G0 X%.4f Y%.4f" % (self.hole_locations[0][0], self.hole_locations[0][1]),
-            "G0 Z%.4f" % self.z_clear,
-            cycle,
-            self.add_holes_(),
-            'G80',
-            self.epilog()
-        ])
+        if len(self.hole_locations) == 0:
+            return []
 
-    def add_holes_(self):
-        output = []
+        output = ["G0 X%.4f Y%.4f" % (self.hole_locations[0][0], self.hole_locations[0][1]),
+                  "G0 Z%.4f" % self.z_feed_start,
+                  cycle]
+        self.add_holes_(output)
+        output.append('G80')
+        output.append('G0 Z%.4f' % self.z_clear)
+
+        return output
+
+    def add_holes_(self, output):
         for hole in self.hole_locations[1:]:
             output.append('X%.4f Y%.4f' % (hole[0], hole[1]))
 
-        return '\n'.join(output)
+        return output
