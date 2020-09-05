@@ -1,10 +1,10 @@
 from qtpy.QtCore import Qt, QModelIndex
 from qtpy.QtGui import QStandardItemModel
-from qtpy.QtWidgets import QTableView, QStyledItemDelegate, QMessageBox, QAbstractItemView
+from qtpy.QtWidgets import QTableView, QStyledItemDelegate
 
-from qtpyvcp.widgets.conversational.base_widget import ConversationalBaseWidget
 from qtpyvcp.widgets.conversational.ops.drill_ops import DrillOps
 from qtpyvcp.widgets.input_widgets.float_line_edit import FloatLineEdit
+from qtpyvcp.widgets.conversational.drilling_widget import DrillWidgetBase
 
 
 class XYCoordItemDelegate(QStyledItemDelegate):
@@ -81,7 +81,7 @@ class XYCoordModel(QStandardItemModel):
             return False
 
 
-class XYCoordWidget(ConversationalBaseWidget):
+class XYCoordWidget(DrillWidgetBase):
     def __init__(self, parent=None):
         super(XYCoordWidget, self).__init__(parent, 'xy_coord.ui')
 

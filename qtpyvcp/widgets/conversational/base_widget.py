@@ -28,13 +28,15 @@ class ConversationalBaseWidget(QWidget):
         uic.loadUi(os.path.join(os.path.dirname(__file__), ui_file), self)
 
         self._tool_is_valid = False
+        self._current_tool = None
         self._tool_table = TOOL_TABLE.getToolTable()
 
         self._validators = [self._validate_z_heights,
                             self._validate_spindle_rpm,
                             self._validate_xy_feed_rate,
                             self._validate_z_feed_rate,
-                            self._validate_tool_number]
+                            self._validate_tool_number,
+                            self._validate_retract_height]
 
         self.wcs_input.addItem('G54')
         self.wcs_input.addItem('G55')
@@ -45,13 +47,6 @@ class ConversationalBaseWidget(QWidget):
         self.wcs_input.addItem('G59.1')
         self.wcs_input.addItem('G59.2')
         self.wcs_input.addItem('G59.3')
-
-        self.drill_type_input.addItem('DRILL')
-        self.drill_type_input.addItem('PECK')
-        self.drill_type_input.addItem('BREAK')
-        self.drill_type_input.addItem('DWELL')
-        self.drill_type_input.addItem('TAP')
-        self.drill_type_input.addItem('RIGID TAP')
 
         self.unit_input.addItem('IN')
         self.unit_input.addItem('MM')
@@ -67,11 +62,7 @@ class ConversationalBaseWidget(QWidget):
         self.xy_feed_rate_input.setText('{0:.3f}'.format(DEFAULT_LINEAR_VELOCITY))
         self.spindle_rpm_input.setText('{0:.3f}'.format(DEFAULT_SPINDLE_SPEED))
 
-        self.drill_type_param_value.setVisible(False)
-        self.drill_type_param_label.setVisible(False)
-
         self.post_to_file.clicked.connect(self.on_post_to_file)
-        self.drill_type_input.currentIndexChanged.connect(self.set_drill_type_params)
 
         self.tool_number_input.editingFinished.connect(self.set_tool_description_from_tool_num)
         self.tool_number_input.editingFinished.connect(self._validate_tool_number)
@@ -80,6 +71,7 @@ class ConversationalBaseWidget(QWidget):
         self.spindle_rpm_input.editingFinished.connect(self._validate_spindle_rpm)
         self.xy_feed_rate_input.editingFinished.connect(self._validate_xy_feed_rate)
         self.z_feed_rate_input.editingFinished.connect(self._validate_z_feed_rate)
+        self.retract_height_input.editingFinished.connect(self._validate_retract_height)
 
         STATUS.g5x_index.onValueChanged(self.update_wcs)
         STATUS.program_units.onValueChanged(self.update_selected_unit)
@@ -95,33 +87,6 @@ class ConversationalBaseWidget(QWidget):
         self.tool_number_input.setText('{}'.format(STATUS.tool_in_spindle))
         self.set_tool_description_from_tool_num()
 
-    def set_drill_type_params(self, _):
-        self.z_feed_rate_input.setEnabled(True)
-        if self.drill_type() == 'DWELL':
-            self.drill_type_param_label.setText('DWELL TIME (SEC.)')
-            self.drill_type_param_value.setText('0.00')
-            self.drill_type_param_value.setVisible(True)
-            self.drill_type_param_label.setVisible(True)
-        elif self.drill_type() == 'PECK':
-            self.drill_type_param_label.setText('PECK DEPTH')
-            self.drill_type_param_value.setText('0.0000')
-            self.drill_type_param_value.setVisible(True)
-            self.drill_type_param_label.setVisible(True)
-        elif self.drill_type() == 'BREAK':
-            self.drill_type_param_label.setText('BREAK DEPTH')
-            self.drill_type_param_value.setText('0.0000')
-            self.drill_type_param_value.setVisible(True)
-            self.drill_type_param_label.setVisible(True)
-        elif self.drill_type() in ['TAP', 'RIGID TAP']:
-            self.z_feed_rate_input.setEnabled(False)
-            self.drill_type_param_label.setText('PITCH')
-            self.drill_type_param_value.setText('0.00')
-            self.drill_type_param_value.setVisible(True)
-            self.drill_type_param_label.setVisible(True)
-        else:
-            self.drill_type_param_value.setVisible(False)
-            self.drill_type_param_label.setVisible(False)
-
     def set_tool_description_from_tool_num(self):
         tool_table = self._tool_table
         tool_number = self.tool_number()
@@ -130,10 +95,12 @@ class ConversationalBaseWidget(QWidget):
             self.tool_description.setText((desc[:30] + '...') if len(desc) > 30 else desc)
             self.tool_description.setToolTip(desc)
             self._tool_is_valid = (tool_number > 0)
+            self._current_tool = tool_table[tool_number] if self._tool_is_valid else None
         except KeyError:
             self._tool_is_valid = False
             self.tool_description.setText('TOOL NOT IN TOOL TABLE')
             self.tool_description.setToolTip('TOOL NOT IN TOOL TABLE')
+            self._current_tool = None
 
     def name(self):
         return self.name_input.text()
@@ -144,23 +111,14 @@ class ConversationalBaseWidget(QWidget):
     def unit(self):
         return self.unit_input.currentText()
 
-    def drill_type(self):
-        return self.drill_type_input.currentText()
-
-    def drill_peck_depth(self):
-        return self.drill_type_param_value.value()
-
-    def drill_break_depth(self):
-        return self.drill_type_param_value.value()
-
-    def drill_dwell_time(self):
-        return self.drill_type_param_value.value()
-
-    def tap_pitch(self):
-        return self.drill_type_param_value.value()
-
     def tool_number(self):
         return self.tool_number_input.value()
+
+    def tool_diameter(self):
+        if self._tool_is_valid:
+            return self._tool_table[self.tool_number()]['D']
+        else:
+            return 0.
 
     def spindle_rpm(self):
         return self.spindle_rpm_input.value()
@@ -244,7 +202,7 @@ class ConversationalBaseWidget(QWidget):
         if not self.z_start() > self.z_end():
             self.z_start_input.setStyleSheet("background-color: rgb(205, 141, 123)")
             self.z_end_input.setStyleSheet("background-color: rgb(205, 141, 123)")
-            error = 'Start position must be greater than end position.'
+            error = 'Z start position must be greater than end position.'
             self.z_end_input.setToolTip(error)
             return False, error
         else:
@@ -290,6 +248,16 @@ class ConversationalBaseWidget(QWidget):
             self.tool_number_input.setStyleSheet('background-color: rgb(205, 141, 123)')
             error = 'Tool is not valid.'
             self.tool_number_input.setToolTip(error)
+            return False, error
+
+    def _validate_retract_height(self):
+        if self.retract_height() >= 0:
+            self.retract_height_input.setStyleSheet('')
+            return True, None
+        else:
+            self.retract_height_input.setStyleSheet('background-color: rgb(205, 141, 123)')
+            error = 'Retract height must be 0 or greater.'
+            self.retract_height_input.setToolTip(error)
             return False, error
 
     def _confirm_action(self, title, message):
